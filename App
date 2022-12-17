@@ -1,0 +1,80 @@
+/**
+ * Virtual Thermostat for SmartThings
+ *
+ * Author: Your Name
+ * Date: MM/DD/YYYY
+ *
+ * This SmartApp creates a virtual thermostat device that can be controlled through the SmartThings app.
+ * The virtual thermostat can be set to a specific temperature or can be set to follow a schedule.
+ *
+ * To use this app, you will need to install it through the SmartThings app and then configure it by
+ * specifying the temperature units (Celsius or Fahrenheit), the minimum and maximum temperature
+ * settings, and the schedule (if using one).
+ */
+
+// Constants for temperature units
+const TEMP_UNIT_C = "C"
+const TEMP_UNIT_F = "F"
+
+// Constants for temperature modes
+const MODE_OFF = "Off"
+const MODE_HEAT = "Heat"
+const MODE_COOL = "Cool"
+
+// Constants for device capabilities
+const CAPABILITY_THERMOSTAT_SET_POINT = "thermostatSetpoint"
+const CAPABILITY_THERMOSTAT_MODE = "thermostatMode"
+
+// Create a virtual thermostat device
+def createVirtualThermostat() {
+  def virtualThermostat = new physicalgraph.device.HubAction(
+    deviceNetworkId: "virtual-thermostat",
+    name: "Virtual Thermostat",
+    hub: hub
+  )
+  
+  // Add thermostat set point capability
+  virtualThermostat.addCapability(CAPABILITY_THERMOSTAT_SET_POINT)
+  
+  // Add thermostat mode capability
+  virtualThermostat.addCapability(CAPABILITY_THERMOSTAT_MODE)
+  
+  // Save the device
+  virtualThermostat.save()
+}
+
+// Set the temperature units for the virtual thermostat
+def setTemperatureUnits(units) {
+  // Update the device's settings with the specified temperature units
+  device.updateSetting(name: "units", value: units)
+}
+
+// Set the minimum and maximum temperature settings for the virtual thermostat
+def setTemperatureRange(minTemp, maxTemp) {
+  // Update the device's settings with the specified minimum and maximum temperatures
+  device.updateSetting(name: "minTemp", value: minTemp)
+  device.updateSetting(name: "maxTemp", value: maxTemp)
+}
+
+// Set the temperature for the virtual thermostat
+def setTemperature(temp) {
+  // Update the device's thermostat set point
+  device.setValue(CAPABILITY_THERMOSTAT_SET_POINT, temp)
+}
+
+// Set the mode for the virtual thermostat
+def setMode(mode) {
+  // Update the device's thermostat mode
+  device.setValue(CAPABILITY_THERMOSTAT_MODE, mode)
+}
+
+// Set the virtual thermostat to follow a schedule
+def setSchedule(schedule) {
+  // Update the device's settings with the specified schedule
+  device.updateSetting(name: "schedule", value: schedule)
+}
+
+// Main function
+def install() {
+  // Create the virtual thermostat device
+  createVirtualThermostat()
